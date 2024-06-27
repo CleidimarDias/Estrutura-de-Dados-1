@@ -22,7 +22,7 @@ typedef Elem* Lista;
 Lista* cria_lista();
 void libera_lista(Lista* li);
 int tamanho_lista(Lista* li);
-int insere_lista_ordenada(Lista* li, struct aluno al);
+int insere_lista_final(Lista* li, struct aluno al);
 int remove_lista_inicio(Lista* li);
 int remove_lista_final(Lista* li);
 int busca_lista_mat(Lista* li, int mat, struct aluno *al);
@@ -41,13 +41,13 @@ int main() {
 
     // Inserindo elementos na lista
     int i;
-    for ( i = 9; i >= 0; i--) { // Inserir de trás para frente para começar com a matrícula 10
+    for (i = 9; i >= 0; i--) { // Inserir de trás para frente para começar com a matrícula 10
         struct aluno al;
         al.matricula = matriculas[i];
         al.n1 = notas[i][0];
         al.n2 = notas[i][1];
-        al.media = (al.n1 + al.n2) / 2.0;
-        insere_lista_ordenada(li, al);
+        al.media = (((al.n1) *2) + ((al.n2)*3))  / 5;
+        insere_lista_final(li, al);
     }
 
     printf("Foram inseridos 10 elementos na lista!\n");
@@ -66,8 +66,8 @@ int main() {
     al.matricula = 11;
     al.n1 = 10.0;
     al.n2 = 10.0;
-    al.media = (al.n1 + al.n2) / 2.0;
-    insere_lista_ordenada(li, al);
+    al.media = (((al.n1) *2) + ((al.n2)*3))  / 5;
+    insere_lista_final(li, al);
 
     printf("A lista contém %d elementos\n", tamanho_lista(li));
     printf("Elementos da lista após inserção:\n");
@@ -94,10 +94,16 @@ int main() {
     // Buscando a posição da matrícula 5 na lista
     printf("\nBuscando a posição da matrícula 5 na lista!\n");
     struct aluno busca_aluno;
-    if (busca_lista_mat(li, 5, &busca_aluno)) {
-        printf("Matrícula 5 encontrada na lista!\n");
+    no = *li;
+    int pos = 1;
+    while (no != NULL && no->dados.matricula != 5) {
+        no = no->prox;
+        pos++;
+    }
+    if (no != NULL) {
+        printf("A matrícula 5 está na posição %d da lista!\n", pos);
     } else {
-        printf("Matrícula 5 não encontrada na lista!\n");
+        printf("A matrícula 5 não foi encontrada na lista!\n");
     }
 
     // Liberando a lista
@@ -142,7 +148,7 @@ int tamanho_lista(Lista* li) {
     return cont;
 }
 
-int insere_lista_ordenada(Lista* li, struct aluno al) {
+int insere_lista_final(Lista* li, struct aluno al) {
     if (li == NULL) {
         return 0;
     }
@@ -151,20 +157,17 @@ int insere_lista_ordenada(Lista* li, struct aluno al) {
         return 0;
     }
     no->dados = al;
-    if (*li == NULL || al.matricula > (*li)->dados.matricula) {
-        no->prox = *li;
+    no->prox = NULL;
+    if (*li == NULL) {
         *li = no;
-        return 1;
     } else {
-        Elem *ant = *li, *atual = (*li)->prox;
-        while (atual != NULL && atual->dados.matricula > al.matricula) {
-            ant = atual;
-            atual = atual->prox;
+        Elem *aux = *li;
+        while (aux->prox != NULL) {
+            aux = aux->prox;
         }
-        ant->prox = no;
-        no->prox = atual;
-        return 1;
+        aux->prox = no;
     }
+    return 1;
 }
 
 int remove_lista_inicio(Lista* li) {

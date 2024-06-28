@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <locale.h>
 #include "ListaDinEncad.h" 
 
 
@@ -193,29 +194,33 @@ int remove_lista_final (Lista* li)
 	return 1;
 }
 
-int remove_lista (Lista* li, int mat) 
+int remove_lista(Lista* li, int mat) 
 { 
-	if (li= NULL)
-		return 0;
-	
-	if ((*li) == NULL)//lista vazia
-		return 0;
-	
-	Elem *ant, *no = *li;
-	
-	while (no != NULL && no->dados.matricula != mat)
-		ant = no;
-	
-	no = no->prox;
-	if (no== NULL)//não encontrado 
-		return 0;
-	if (no == *li)//remover o primeiro?
-		*li = no->prox;
-	else
-		ant->prox = no->prox;
-	free (no);
-	
-	return 1;
+    if (li == NULL || *li == NULL) // lista vazia
+        return 0;
+    
+    Elem *ant = NULL; // ponteiro para o elemento anterior
+    Elem *atual = *li; // ponteiro para percorrer a lista
+    
+    // Busca pelo elemento com a matrícula especificada
+    while (atual != NULL && atual->dados.matricula != mat) {
+        ant = atual;
+        atual = atual->prox;
+    }
+    
+    // Se o elemento não foi encontrado
+    if (atual == NULL)
+        return 0;
+    
+    // Remoção do elemento encontrado
+    if (ant == NULL) { // remoção do primeiro elemento
+        *li = atual->prox;
+    } else {
+        ant->prox = atual->prox;
+    }
+    
+    free(atual); // libera o nó da memória
+    return 1;
 }
 
 int busca_lista_pos (Lista* li, int pos, struct aluno *al)
@@ -259,4 +264,85 @@ int busca_lista_mat(Lista* li, int mat, struct aluno *al)
 		*al = no->dados;
 		return 1;
 	}
+}
+
+int main() {
+    setlocale(LC_ALL, "Portuguese");
+
+    Lista *li; // Declaração do ponteiro para a lista
+    struct aluno al; // Declaração de uma variável do tipo aluno
+
+    // Criando a lista
+    li = cria_lista();
+
+    // Verificando se a lista foi criada corretamente
+    if (li == NULL) {
+        printf("Erro ao criar a lista!\n\n");
+        return 1;
+    } else {
+        printf("Lista criada com sucesso\n\n");
+    }
+
+    // Inserindo elementos na lista
+    al.matricula = 1;
+    snprintf(al.nome, sizeof(al.nome), "João"); // usando snprintf para copiar uma string para al.nome
+    al.n1 = 7.5;
+    al.n2 = 8.0;
+    al.n3 = 6.5;
+    insere_lista_final(li, al);
+
+    al.matricula = 2;
+    snprintf(al.nome, sizeof(al.nome), "Maria");
+    al.n1 = 6.0;
+    al.n2 = 7.0;
+    al.n3 = 8.0;
+    insere_lista_final(li, al);
+
+    al.matricula = 3;
+    snprintf(al.nome, sizeof(al.nome), "Pedro");
+    al.n1 = 5.0;
+    al.n2 = 6.0;
+    al.n3 = 7.0;
+    insere_lista_final(li, al);
+
+    // Exibindo a lista antes da remoção
+    printf("Lista antes da remoção:\n");
+    printf("--------------------------------------------------\n");
+    printf("Matrícula\tNome\t\tNota1\tNota2\tNota3\n");
+    printf("--------------------------------------------------\n");
+
+    int i;
+    struct aluno aluno_temp;
+
+    for (i = 1; i <= tamanho_lista(li); i++) {
+        busca_lista_pos(li, i, &aluno_temp);
+        printf("%d\t\t%s\t\t%.1f\t%.1f\t%.1f\n",
+               aluno_temp.matricula, aluno_temp.nome,
+               aluno_temp.n1, aluno_temp.n2, aluno_temp.n3);
+    }
+    printf("--------------------------------------------------\n");
+
+    // Removendo um aluno da lista
+    int matricula_remover = 1;
+    printf("\nRemovendo aluno com matrícula %d...\n", matricula_remover);
+    remove_lista(li, matricula_remover);
+
+    // Exibindo a lista após a remoção
+    printf("\nLista após remoção:\n");
+    printf("--------------------------------------------------\n");
+    printf("Matrícula\tNome\t\tNota1\tNota2\tNota3\n");
+    printf("--------------------------------------------------\n");
+
+    for (i = 1; i <= tamanho_lista(li); i++) {
+        busca_lista_pos(li, i, &aluno_temp);
+        printf("%d\t\t%s\t\t%.1f\t%.1f\t%.1f\n",
+               aluno_temp.matricula, aluno_temp.nome,
+               aluno_temp.n1, aluno_temp.n2, aluno_temp.n3);
+    }
+    printf("--------------------------------------------------\n");
+
+    // Liberando a lista da memória
+    libera_lista(li);
+
+    return 0;
 }

@@ -283,3 +283,79 @@ int busca_lista_mat (Lista* li, int mat, struct aluno *al)
 		return 1;
 	}
 }
+
+void mostra_lista(Lista* li) {
+    if (lista_vazia(li)) {
+        printf("Lista vazia!\n");
+        return;
+    }
+
+    Elem* atual = *li;
+    do {
+        printf("Matricula: %d, Nome: %s, Notas: %.2f %.2f %.2f\n", 
+               atual->dados.matricula, 
+               atual->dados.nome,
+               atual->dados.n1,
+               atual->dados.n2,
+               atual->dados.n3);
+        atual = atual->prox;
+    } while (atual != *li);
+    printf("\n");
+}
+
+
+int main() {
+    Lista* li; // Ponteiro para a lista
+    struct aluno a1, a2, a3, a4; // Exemplos de alunos para inserção na lista
+    struct aluno aluno_busca;
+    int busca_posicao = 2;
+    int matricula_busca = 12345;
+
+    // Criação da lista
+    li = cria_lista();
+
+    // Verifica se a lista foi criada corretamente
+    if (li == NULL) {
+        printf("Erro ao criar a lista!\n");
+        return 1; // Termina o programa com erro
+    }
+
+    // Inserção de elementos na lista
+    a1.matricula = 12345;
+    a2.matricula = 67890;
+    a3.matricula = 54321;
+    a4.matricula = 54344;
+
+    insere_lista_final(li, a1);
+    insere_lista_final(li, a2);
+    insere_lista_final(li, a3);
+    insere_lista_ordenada ( li, a4);
+    
+    mostra_lista(li);
+
+    // Busca por posição na lista
+    if (busca_lista_pos(li, busca_posicao, &aluno_busca)) {
+        printf("Aluno encontrado na posicao %d:\n", busca_posicao);
+        printf("Matricula: %d\n", aluno_busca.matricula);
+    } else {
+        printf("Nao foi possivel encontrar o aluno na posicao %d\n", busca_posicao);
+    }
+    
+    
+
+    // Busca por matrícula na lista
+    if (busca_lista_mat(li, matricula_busca, &aluno_busca)) {
+        printf("Aluno encontrado com matricula %d:\n", matricula_busca);
+        printf("Nome: %s\n", aluno_busca.nome);
+    } else {
+        printf("Nao foi possivel encontrar o aluno com matricula %d\n", matricula_busca);
+    }
+
+    // Remoção de elementos da lista
+    remove_lista_final(li);
+
+    // Libera a lista da memória
+    libera_lista(li);
+
+    return 0;
+}

@@ -2,23 +2,23 @@
 #include <stdlib.h>
 #include <locale.h>
 
-// DefiniÁ„o da estrutura aluno
+// Defini√ß√£o da estrutura aluno
 struct aluno {
     int matricula;
     float n1, n2, media;
 };
 
-// DefiniÁ„o da estrutura elemento
+// Defini√ß√£o da estrutura elemento
 struct elemento {
     struct aluno dados;
     struct elemento *prox;
 };
 typedef struct elemento Elem;
 
-// DefiniÁ„o do tipo Lista
+// Defini√ß√£o do tipo Lista
 typedef Elem* Lista;
 
-// ProtÛtipos das funÁıes de manipulaÁ„o da lista
+// Prot√≥tipos das fun√ß√µes de manipula√ß√£o da lista
 Lista* cria_lista();
 void libera_lista(Lista* li);
 int tamanho_lista(Lista* li);
@@ -27,7 +27,7 @@ int remove_lista_inicio(Lista* li);
 int remove_lista_final(Lista* li);
 int busca_lista_mat(Lista* li, int mat, struct aluno *al);
 
-// FunÁ„o principal
+// Fun√ß√£o principal
 int main() {
     setlocale(LC_ALL, "");
 
@@ -41,7 +41,7 @@ int main() {
 
     // Inserindo elementos na lista
     int i;
-    for (i = 9; i >= 0; i--) { // Inserir de tr·s para frente para comeÁar com a matrÌcula 10
+    for (i = 9; i >= 0; i--) { // Inserir de tr√°s para frente para come√ßar com a matr√≠cula 10
         struct aluno al;
         al.matricula = matriculas[i];
         al.n1 = notas[i][0];
@@ -53,15 +53,15 @@ int main() {
     printf("Foram inseridos 10 elementos na lista!\n");
 
     // Exibindo os elementos da lista
-    printf("Elementos da lista com mÈdia:\n");
+    printf("Elementos da lista com m√©dia:\n");
     Elem* no = *li;
     while (no != NULL) {
-        printf("MatrÌcula: %d, N1: %.1f, N2: %.1f, MÈdia: %.1f\n", no->dados.matricula, no->dados.n1, no->dados.n2, no->dados.media);
+        printf("Matr√≠cula: %d, N1: %.1f, N2: %.1f, M√©dia: %.1f\n", no->dados.matricula, no->dados.n1, no->dados.n2, no->dados.media);
         no = no->prox;
     }
 
     // Inserindo um elemento adicional
-    printf("\nInserindo a matrÌcula 11!\n");
+    printf("Inserindo a matr√≠cula 11!\n");
     struct aluno al;
     al.matricula = 11;
     al.n1 = 10.0;
@@ -69,30 +69,30 @@ int main() {
     al.media = (((al.n1) *2) + ((al.n2)*3))  / 5;
     insere_lista_final(li, al);
 
-    printf("A lista contÈm %d elementos\n", tamanho_lista(li));
-    printf("Elementos da lista apÛs inserÁ„o:\n");
+    printf("A lista cont√©m %d elementos\n", tamanho_lista(li));
+   // printf("Elementos da lista ap√≥s inser√ß√£o:\n");
     no = *li;
     while (no != NULL) {
-        printf("MatrÌcula: %d, N1: %.1f, N2: %.1f, MÈdia: %.1f\n", no->dados.matricula, no->dados.n1, no->dados.n2, no->dados.media);
+        printf("Matr√≠cula: %d, N1: %.1f, N2: %.1f, M√©dia: %.1f\n", no->dados.matricula, no->dados.n1, no->dados.n2, no->dados.media);
         no = no->prox;
     }
 
-    // Removendo o primeiro e ˙ltimo elementos
-    printf("\nRemovendo o primeiro e ˙ltimo elemento da lista!\n");
+    // Removendo o primeiro e √∫ltimo elementos
+    printf("\nRemovendo o primeiro e √∫ltimo elemento da lista!\n");
     remove_lista_inicio(li);
     remove_lista_final(li);
 
-    printf("Lista apÛs a remoÁ„o dos dois elementos!\n");
-    printf("A lista contÈm %d elementos\n", tamanho_lista(li));
-    printf("Elementos da lista apÛs remoÁ„o:\n");
+    printf("Lista ap√≥s a remo√ß√£o dos dois elementos!");
+    printf("A lista cont√©m %d elementos\n", tamanho_lista(li));
+   // printf("Elementos da lista ap√≥s remo√ß√£o:\n");
     no = *li;
     while (no != NULL) {
-        printf("MatrÌcula: %d, N1: %.1f, N2: %.1f, MÈdia: %.1f\n", no->dados.matricula, no->dados.n1, no->dados.n2, no->dados.media);
+        printf("Matr√≠cula: %d, N1: %.1f, N2: %.1f, M√©dia: %.1f\n", no->dados.matricula, no->dados.n1, no->dados.n2, no->dados.media);
         no = no->prox;
     }
 
-    // Buscando a posiÁ„o da matrÌcula 5 na lista
-    printf("\nBuscando a posiÁ„o da matrÌcula 5 na lista!\n");
+    // Buscando a posi√ß√£o da matr√≠cula 5 na lista
+    printf("\nBuscando a posi√ß√£o da matr√≠cula 5 na lista!\n");
     struct aluno busca_aluno;
     no = *li;
     int pos = 1;
@@ -101,19 +101,19 @@ int main() {
         pos++;
     }
     if (no != NULL) {
-        printf("A matrÌcula 5 est· na posiÁ„o %d da lista!\n", pos);
+        printf("A matr√≠cula 5 est√° na posi√ß√£o %d da lista!\n", pos);
     } else {
-        printf("A matrÌcula 5 n„o foi encontrada na lista!\n");
+        printf("A matr√≠cula 5 n√£o foi encontrada na lista!\n");
     }
 
     // Liberando a lista
-    printf("\nDestruindo a lista!\n");
+    printf("Destruindo a lista!\n");
     libera_lista(li);
 
     return 0;
 }
 
-// ImplementaÁ„o das funÁıes de manipulaÁ„o da lista
+// Implementa√ß√£o das fun√ß√µes de manipula√ß√£o da lista
 
 Lista* cria_lista() {
     Lista* li = (Lista*) malloc(sizeof(Lista));
@@ -213,4 +213,3 @@ int busca_lista_mat(Lista* li, int mat, struct aluno *al) {
         return 1;
     }
 }
-
